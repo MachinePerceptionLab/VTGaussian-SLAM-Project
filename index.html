@@ -41,7 +41,7 @@
   <script src="./static/js/bulma-slider.min.js"></script>
   <script src="./static/js/index.js"></script>
   <!-- <script type="text/javascript" src="./gb3d_bundle.js"></script> -->
-  
+
 </head>
 <body>
 
@@ -188,21 +188,21 @@
     <!-- Method. -->
     <div class="columns is-centered has-text-centered">
       <div class="column is-full-width">
-        <h2 class="title is-3" style="margin-top: -20px">Demo</h2>
+        <!-- <h2 class="title is-3" style="margin-top: -20px">Demo</h2> -->
 
         <video width="800"  poster="" id="Video" autoplay controls muted loop playsinline height="10%">
-          <source src="./videos/demo.mov"
+          <source src="./videos/video_gs_center.mp4"
                   type="video/mp4">
         </video>
         <div class="content has-text-justified">
           <p align="center">
-            Visualization of Reconstruction in the context of SLAM.
+            VTGaussian-SLAM can reconstruct a 3D scene from an RGBD sequence.
           </p>
 
         </div>
         <div class="content has-text-justified">
           <p align="center" style="font-size:12px;">
-            (The blue in attention visualization indicates the attention mechanism pays more attention on depth fusion priors.)
+            (The points with color are Gaussian centers that are tied with the GT depth images.)
           </p>
 
         </div>
@@ -239,6 +239,42 @@
   </div>
 </section>
 
+
+<section class="section">
+  <div class="container is-max-desktop">
+
+    <!-- Method. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3" style="margin-top: -20px">Method</h2>
+
+        <img src="./images/OverviewGSSLAM_mod.png" class="center">
+        <div class="content has-text-justified">
+          <p style="margin-top: 30px">
+            <b>Overview of our method.</b> We organize view-tied 3D Gaussians from several consecutive frames as a section, allowing us to retain as many Gaussians
+            as the GPU memory to represent a local area. This enables us to access these Gaussians more efficiently and, more
+            importantly, facilitates the more robust completion of missing depth by utilizing the depth information from neighboring
+            frames. In each section, we mark the first frame as a head to differentiate it from regular frames for different
+            Gaussian initialization strategies in mapping. For tracking the latest frame, we select Gaussians in a section, render
+            them from the camera pose initialized by the constant speed assumption, and optimize the pose by minimizing rendering
+            errors to the latest frame. If the latest frame is the head of a new section, as shown in (a), we select the Gaussians
+            in a certain section in front according to the visibility. If the latest frame is not a head but a regular frame in the
+            current section, as shown in (c), we select the Gaussians in this section for renderings with higher quality. For
+            mapping the scene using the latest frame, if the latest frame is the head of a new section, as shown in (b), we
+            initialize Gaussians by centering them at all pixels with valid depth values. Suppose the latest frame is not a head but
+            a regular frame in an existing section, as shown in (d). In that case, we only initialize Gaussians as a complement in
+            areas where pixels have valid depth values and the existing Gaussians in the current section cannot cover.
+          </p>
+        </div>
+
+      </div>
+    </div>
+    <!--/ Animation. -->
+
+  </div>
+</section>
+
+
 <section class="section">
   <div class="container is-max-desktop">
 
@@ -247,9 +283,8 @@
       <div class="column is-full-width">
         <h2 class="title is-3" style="margin-top: -20px">Video</h2>
 
-        <video width="680"  poster="" id="Video" autoplay controls muted loop playsinline height="10%">
-          <source src="./videos/Method.mov"
-                  type="video/mp4">
+        <video width="800" poster="" id="Video" autoplay controls muted loop playsinline height="10%">
+          <source src="./videos/VTGaussianSLAM.mp4" type="video/mp4">
         </video>
         <div class="content has-text-justified">
           <p>
@@ -268,36 +303,7 @@
 </h2> -->
 
 
-<section class="section">
-  <div class="container is-max-desktop">
-
-    <!-- Method. -->
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-full-width">
-        <h2 class="title is-3" style="margin-top: -20px">Method</h2>
-
-        <!-- <img src="./images/overview.png" class="center"> -->
-        <embed src="./pdfs/OverviewGSSLAM_mod.pdf" type="application/pdf" width="100%" height="600px" class="center">
-        <div class="content has-text-justified">
-          <p style="margin-top: 30px">
-            <b>Overview of our method.</b> We organize view-tied 3D Gaussians from several consecutive frames as a section so that we can keep as many Gaussians
-            as the GPU memory allows to represent a local area, access these Gaussians more efficiently, and more importantly, enable more robust completion of missing depth by utilizing neighboring frames’ depth. 
-            In each section, we mark the first frame as a head to differentiate it from regular frames for different Gaussian initialization strategies in mapping. 
-            For tracking the latest frame, we select Gaussians in a section, render them from the camera pose initialized by the constant speed assumption, and optimize the pose by minimizing rendering errors to the latest frame. 
-            If the latest frame is the head of a new section, as shown in (a), we select the Gaussians in a certain section in front according to the visibility. 
-            If the latest frame is not a head but a regular frame in the current section, as shown in (c), we select the Gaussians in this section for renderings with higher quality. 
-            For mapping the scene using the latest frame, if the latest frame is the head of a new section, as shown in (b), we initialize Gaussians by centering them at all pixels with valid depth values. 
-            If the latest frame is not a head but a regular frame in an existing section, as shown in (d), we only initialize Gaussians as a complement in areas where pixels have valid depth values and the existing Gaussians in the current section cannot cover.
-          </p>
-        </div>
-
-      </div>
-    </div>
-    <!--/ Animation. -->
-
-  </div>
-</section>
-
+<!-- 
 <style>
 
   .box .left{
@@ -311,54 +317,145 @@
       position:absolute;
 
   }
-  </style>
+  </style> -->
 
 
 <section class="section">
-  <div class="container is-max-desktop">
+<div class="container is-max-desktop">
+  <div class="columns is-centered has-text-centered">
+    <div class="column is-full-width">
+  <h2 class="title is-3" style="margin-top: -30px">Visual Comparisons</h2>
+  <!-- <h2 class="title is-3">Visual Comparisons</h2> -->
+    </div>
+  </div>
+  <div class="content has-text-justified">
+    <p>
 
-    <!-- Method. -->
-    <div class="columns is-centered">
-      <div class="column is-full-width">
-        <h2 class="title is-3 has-text-centered" style="margin-top: -20px">Experimental Results</h2>
-        <div class="content has-text-justified">
-          <p align="center" style="font-size:12px;">
-            (Red in error maps indicates large errors.)
-          </p>
+    </p>
+  </div>
+  <div class="columns is-centered">
+    <!-- Visual Effects. -->
+    <div class="column">
+      <div class="content">
+        <div class="columns is-centered">
+          <div class="column is-full-width">
+            <div id="example1" class="bal-container-small">
 
+              <div class="bal-after">
+                <img src="images/comparisons/our_gs_0885.png">
+                <div class="bal-afterPosition afterLabel">
+                  Ours
+                </div>
+              </div>
+
+              <div class="bal-before">
+                <div class="bal-before-inset">
+                  <img src="images/comparisons/niceslamcolor_00885.png">
+                  <div class="bal-beforePosition beforeLabel">
+                    NICE-SLAM
+                  </div>
+                </div>
+              </div>
+
+              <div class="bal-handle">
+                <span class=" handle-left-arrow"></span>
+                <span class="handle-right-arrow"></span>
+              </div>
+
+            </div>
+
+
+            <div id="example2" class="bal-container-small">
+
+              <div class="bal-after">
+                <img src="images/comparisons/ours_scene207_gs_0340.png">
+                <div class="bal-afterPosition afterLabel">
+                  Ours
+                </div>
+              </div>
+
+              <div class="bal-before">
+                <div class="bal-before-inset">
+                  <img src="images/comparisons/gslam_scene207_00340.png">
+                  <div class="bal-beforePosition beforeLabel">
+                    Gaussian-SLAM
+                  </div>
+                </div>
+              </div>
+
+              <div class="bal-handle">
+                <span class=" handle-left-arrow"></span>
+                <span class="handle-right-arrow"></span>
+              </div>
+
+            </div>
+          </div>
         </div>
-        <h3 class="title is-4">Replica Dataset</h3>
-        <h4 class="title is-4 has-text-centered">NICE-SLAM &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
-          &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  Ours</h4>
-          <div style="float: left;">
-          <video width="480"  poster="" id="Video" autoplay controls muted loop playsinline height="10%">
-            <source src="./videos/nice_replica.mov"
-                    type="video/mp4">
-          </video></div><div style="float: right;">
-          <video width="480"  poster="" id="Video" autoplay controls muted loop playsinline height="10%" >
-            <source src="./videos/our_replica.mp4"
-                    type="video/mp4">
-          </video></div>
-        <h3 class="title is-4">ScanNet Dataset</h3>
-        <h4 class="title is-4 has-text-centered">NICE-SLAM &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
-          &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  Ours</h4>
-          <div style="float: left;">
-            <video width="480"  poster="" id="Video" autoplay controls muted loop playsinline height="10%">
-              <source src="./videos/nice_scannet.mov"
-                      type="video/mp4">
-            </video></div><div style="float: right;">
-            <video width="480"  poster="" id="Video" autoplay controls muted loop playsinline height="10%" >
-              <source src="./videos/our_scannet.mp4"
-                      type="video/mp4">
-            </video></div>
-            
-
       </div>
     </div>
-    <!--/ Animation. -->
 
+    <!--/ Visual Effects. -->
+
+    <!-- Matting. -->
+    <div class="column">
+      <div class="columns is-centered">
+        <div class="column content">
+
+          <div id="example4" class="bal-container-small">
+            <div class="bal-after">
+              <img src="images/comparisons/ours_fr3_office_gs_1980.png">
+              <div class="bal-afterPosition afterLabel">
+                Ours
+              </div>
+            </div>
+
+            <div class="bal-before">
+              <div class="bal-before-inset">
+                <img src="images/comparisons/splatam_fr3_office_gs_1980.png">
+                <div class="bal-beforePosition beforeLabel">
+                  SplaTAM
+                </div>
+              </div>
+            </div>
+
+            <div class="bal-handle">
+              <span class=" handle-left-arrow"></span>
+              <span class="handle-right-arrow"></span>
+            </div>
+
+          </div>
+
+          <div id="example5" class="bal-container-small">
+            <div class="bal-after">
+              <img src="images/comparisons/ours_b20_0060.png">
+              <div class="bal-afterPosition afterLabel">
+                Ours
+              </div>
+            </div>
+
+            <div class="bal-before">
+              <div class="bal-before-inset">
+                <img src="images/comparisons/gt_b20_0060.png">
+                <div class="bal-beforePosition beforeLabel">
+                  Ground Truth
+                </div>
+              </div>
+            </div>
+
+            <div class="bal-handle">
+              <span class=" handle-left-arrow"></span>
+              <span class="handle-right-arrow"></span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+</div>
 </section>
+
+
 
 
 
@@ -367,11 +464,14 @@
 <section class="section" id="BibTeX">
   <div class="container is-max-desktop content">
     <h2 class="title">BibTeX</h2>
-    <pre><code>@inproceedings{Hu2023LNI-ADFP,
-      title = {Learning Neural Implicit through Volume Rendering with Attentive Depth Fusion Priors},
-      author = {Hu, Pengchong and Han, Zhizhong},
-      booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
-      year = {2023}
+    <pre><code>@misc{Hu2025VTGSSLAM,
+    title={VTGaussian-SLAM: RGBD SLAM for Large Scale Scenes with Splatting View-Tied 3D Gaussians},
+    author={Pengchong Hu and Zhizhong Han},
+    year={2025},
+    eprint={2506.02741},
+    archivePrefix={arXiv},
+    primaryClass={cs.CV},
+    url={https://arxiv.org/abs/2506.02741},
     }
   </code></pre>
   </div>
@@ -392,6 +492,24 @@
   </div>
 </footer>
 <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
+<script src="static/js/script.js"></script>
+
+<script>
+  new BeforeAfter({
+    id: '#example1'
+  });
+  new BeforeAfter({
+    id: '#example2'
+  });
+  new BeforeAfter({
+    id: '#example4'
+  });
+  new BeforeAfter({
+    id: '#example5'
+  });
+
+</script>
 
 </body>
 </html>
